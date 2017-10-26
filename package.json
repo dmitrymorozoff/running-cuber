@@ -11,6 +11,7 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
+    "gsap": "^1.20.3",
     "normalize-css": "^2.3.1",
     "orbit-controls-es6": "^1.0.10"
   },

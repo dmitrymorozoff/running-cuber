@@ -15,5 +15,13 @@ import Game from "./app/index.js";
 //     });
 // }
 
-const game = new Game();
+const gameSettings = {
+    camera: {
+        x: -1000,
+        y: 1000,
+        z: 1000
+    }
+};
+
+const game = new Game(gameSettings);
 game.start();

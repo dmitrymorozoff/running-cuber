@@ -1,5 +1,6 @@
 import Player from "../Player/index.js";
 import Cube from "../Cube/index.js";
+import { TweenMax} from "gsap";
 
 export default class Scene {
     constructor(scene, light, camera, renderer) {
@@ -16,7 +17,6 @@ export default class Scene {
         const self = this;
         window.addEventListener("keydown", function(event) {
             var keyCode = event.which;
-            console.log(keyCode);
             if (keyCode == 65) {
                 self.player.moveLeft();
             }

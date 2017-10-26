@@ -3,6 +3,9 @@ import OrbitControls from "orbit-controls-es6";
 import Scene from "./components/Scene/index.js";
 
 export default class Game {
+    constructor(settings) {
+        this.settings = settings;
+    }
     start() {
         let animationId;
         const scene = new THREE.Scene();
@@ -12,9 +15,10 @@ export default class Game {
             1,
             10000
         );
-        camera.position.z = 1000;
-        camera.position.y = 1000;
-        camera.position.x = -850;
+        camera.position.x = this.settings.camera.x;
+        camera.position.y = this.settings.camera.y;
+        camera.position.z = this.settings.camera.z;
+
         const controls = new OrbitControls(camera);
         controls.enableDamping = true;
         controls.dampingFactor = 0.25;
