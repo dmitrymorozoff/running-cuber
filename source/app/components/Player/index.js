@@ -14,6 +14,19 @@ export default class Player {
             this.height,
             this.depth
         );
+        
+        const pointLight = new THREE.PointLight(0xffffff);
+        pointLight.position.set(100, 0, 0);
+        const sphereSize = 15;
+        const pointLightHelper = new THREE.PointLightHelper(
+            pointLight,
+            sphereSize
+        );
+        this.scene.add(pointLight);
+        this.scene.add(pointLightHelper);
+ 
+        console.log(this.scene);
+
         const playerBoxMaterial = new THREE.MeshLambertMaterial({
             color: this.color
         });

@@ -14,7 +14,7 @@ export default class Game {
         );
         camera.position.z = 1000;
         const controls = new OrbitControls(camera);
-
+       
         const axisHelper = new THREE.AxisHelper(1000);
         scene.add(axisHelper);
 
