@@ -1,1 +1,1 @@
-# 3D Running Game using WebGL and THREE.JS
+# 3D Game on THREE.JS
