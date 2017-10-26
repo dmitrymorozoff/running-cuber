@@ -1,6 +1,7 @@
 import * as THREE from "three";
 import OrbitControls from "orbit-controls-es6";
 import Scene from "./components/Scene/index.js";
+import Map from "./components/Map/index.js";
 
 export default class Game {
     constructor(settings) {
@@ -51,6 +52,9 @@ export default class Game {
         const gameScene = new Scene(scene, pointLight, camera, renderer);
         gameScene.draw();
         gameScene.animate();
+
+        const map = new Map(scene, 1000, 0, 1000, 0x6644ff, 200);
+        map.draw();
 
         function resize() {
             camera.aspect = innerWidth / innerHeight;

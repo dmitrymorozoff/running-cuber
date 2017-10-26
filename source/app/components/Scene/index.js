@@ -1,6 +1,6 @@
 import Player from "../Player/index.js";
 import Cube from "../Cube/index.js";
-import { TweenMax} from "gsap";
+import { TweenMax } from "gsap";
 
 export default class Scene {
     constructor(scene, light, camera, renderer) {
