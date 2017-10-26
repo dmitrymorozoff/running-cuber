@@ -13,8 +13,12 @@ export default class Game {
             10000
         );
         camera.position.z = 1000;
+        camera.position.y = 1000;
+        camera.position.x = -850;
         const controls = new OrbitControls(camera);
-       
+        controls.enableDamping = true;
+        controls.dampingFactor = 0.25;
+
         const axisHelper = new THREE.AxisHelper(1000);
         scene.add(axisHelper);
 
@@ -28,6 +32,12 @@ export default class Game {
             sphereSize
         );
         scene.add(pointLightHelper);
+
+        var size = 800;
+        var divisions = 50;
+
+        var gridHelper = new THREE.GridHelper(size, divisions);
+        scene.add(gridHelper);
 
         const renderer = new THREE.WebGLRenderer({ antialias: true });
         renderer.setSize(window.innerWidth, window.innerHeight);

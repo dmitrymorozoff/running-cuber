@@ -7,6 +7,7 @@ export default class Player {
         this.height = height;
         this.depth = depth;
         this.color = color;
+        this.cube = null;
     }
     draw() {
         const playerBox = new THREE.BoxGeometry(
@@ -14,23 +15,50 @@ export default class Player {
             this.height,
             this.depth
         );
-        
-        const pointLight = new THREE.PointLight(0xffffff);
-        pointLight.position.set(100, 0, 0);
-        const sphereSize = 15;
-        const pointLightHelper = new THREE.PointLightHelper(
-            pointLight,
-            sphereSize
-        );
-        this.scene.add(pointLight);
-        this.scene.add(pointLightHelper);
- 
-        console.log(this.scene);
-
         const playerBoxMaterial = new THREE.MeshLambertMaterial({
             color: this.color
         });
-        const playerBoxMesh = new THREE.Mesh(playerBox, playerBoxMaterial);
-        this.scene.add(playerBoxMesh);
+
+        this.cube = new THREE.Mesh(playerBox, playerBoxMaterial);
+        this.cube.position.y = this.height / 2;
+        this.scene.add(this.cube);
+
+        const pointLightFront = new THREE.PointLight(0xffffff);
+        pointLightFront.position.set(
+            this.cube.position.x + this.width / 2 + 50,
+            0,
+            0
+        );
+        const pointLightBack = new THREE.PointLight(0xffffff, 0.7);
+        pointLightBack.position.set(
+            this.cube.position.x - this.width / 2 - 50,
+            200,
+            0
+        );
+
+        const sphereSizeTop = 15;
+        const pointLightHelperFront = new THREE.PointLightHelper(
+            pointLightFront,
+            sphereSizeTop
+        );
+
+        const sphereSizeBack = 15;
+        const pointLightHelperBack = new THREE.PointLightHelper(
+            pointLightBack,
+            sphereSizeBack
+        );
+
+        this.scene.add(pointLightFront);
+        this.scene.add(pointLightBack);
+        this.scene.add(pointLightHelperFront);
+        this.scene.add(pointLightHelperBack);
+    }
+    moveRight() {
+        this.cube.position.x += 13;
+        this.cube.rotation.z -= 0.1;
+    }
+    moveLeft() {
+        this.cube.position.x -= 13;
+        this.cube.rotation.z += 0.1;
     }
 }

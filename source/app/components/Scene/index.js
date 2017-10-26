@@ -8,14 +8,22 @@ export default class Scene {
         this.camera = camera;
         this.renderer = renderer;
         this.animationId = 0;
+        this.player = null;
     }
     draw() {
-        const player = new Player(this.scene, 200, 200, 200, 0x6644ff);
-        player.draw();
-
-        const cube1 = new Cube(this.scene, 200, 800, 200, 0x6644ff);
-        cube1.draw();
-        cube1.move(500);
+        this.player = new Player(this.scene, 200, 200, 200, 0x6644ff);
+        this.player.draw();
+        const self = this;
+        window.addEventListener("keydown", function(event) {
+            var keyCode = event.which;
+            console.log(keyCode);
+            if (keyCode == 65) {
+                self.player.moveLeft();
+            }
+            if (keyCode == 68) {
+                self.player.moveRight();
+            }
+        });
     }
     animate() {
         this.animationId = requestAnimationFrame(this.animate.bind(this));
