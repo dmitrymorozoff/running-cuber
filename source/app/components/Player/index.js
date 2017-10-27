@@ -22,8 +22,8 @@ export default class Player {
         this.cube = new THREE.Mesh(playerBox, playerBoxMaterial);
         this.cube.position.y = this.height / 2;
         this.scene.add(this.cube);
-
-        const pointLightFront = new THREE.PointLight(0xffffff);
+        // Точечный свет
+       /* const pointLightFront = new THREE.PointLight(0xffffff);
         pointLightFront.position.set(
             this.cube.position.x + this.width / 2 + 50,
             0,
@@ -35,7 +35,7 @@ export default class Player {
             200,
             0
         );
-
+        // Помощник для точечного света
         const sphereSizeTop = 15;
         const pointLightHelperFront = new THREE.PointLightHelper(
             pointLightFront,
@@ -51,7 +51,7 @@ export default class Player {
         this.scene.add(pointLightFront);
         this.scene.add(pointLightBack);
         this.scene.add(pointLightHelperFront);
-        this.scene.add(pointLightHelperBack);
+        this.scene.add(pointLightHelperBack);*/
     }
     moveRight() {
         this.cube.position.x += 13;

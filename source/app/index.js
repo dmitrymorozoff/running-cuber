@@ -19,41 +19,49 @@ export default class Game {
         camera.position.x = this.settings.camera.x;
         camera.position.y = this.settings.camera.y;
         camera.position.z = this.settings.camera.z;
-
+        // Хуйня которая вертить камеру
         const controls = new OrbitControls(camera);
         controls.enableDamping = true;
         controls.dampingFactor = 0.25;
-
+        // Вспомогательные оси
         const axisHelper = new THREE.AxisHelper(1000);
         scene.add(axisHelper);
-
-        const pointLight = new THREE.PointLight(0xffffff);
-        pointLight.position.set(500, 1000, 500);
-        scene.add(pointLight);
-
-        const sphereSize = 15;
+        // Вершшхний свет
+        var shadowlight = new THREE.DirectionalLight(0xffffff, 1.8);
+        shadowlight.position.set(0, 50, 0);
+        shadowlight.castShadow = true;
+        shadowlight.shadowDarkness = 0.1;
+        scene.add(shadowlight);
+        /*const sphereSize = 15;
         const pointLightHelper = new THREE.PointLightHelper(
             pointLight,
             sphereSize
         );
-        scene.add(pointLightHelper);
-
+        scene.add(pointLightHelper);*/
+        // Передний свет
+        var light = new THREE.DirectionalLight(0xffffff, 1.8);
+        light.position.set(60, 100, 20);
+        scene.add(light);
+        //Задний свет
+        var backLight = new THREE.DirectionalLight(0xffffff, 1);
+        backLight.position.set(-40, 100, 20);
+        scene.add(backLight);
+        // Сетка
         var size = 800;
         var divisions = 50;
-
         var gridHelper = new THREE.GridHelper(size, divisions);
         scene.add(gridHelper);
 
         const renderer = new THREE.WebGLRenderer({ antialias: true });
         renderer.setSize(window.innerWidth, window.innerHeight);
-        renderer.setClearColor(0x000000, 1);
+        renderer.setClearColor(0x202020, 1);
         document.body.appendChild(renderer.domElement);
 
-        const gameScene = new Scene(scene, pointLight, camera, renderer);
+        const gameScene = new Scene(scene, shadowlight, camera, renderer);
         gameScene.draw();
         gameScene.animate();
 
-        const map = new Map(scene, 1000, 0, 1000, 0x6644ff, 200);
+        const map = new Map(scene, 400, 100, 0, 0xf9f8ed, 200);
         map.draw();
 
         function resize() {
