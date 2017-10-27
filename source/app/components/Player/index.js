@@ -1,5 +1,5 @@
 import * as THREE from "three";
-
+import { TweenMax, Power2, TimelineLite } from "gsap";
 export default class Player {
     constructor(scene, width, height, depth, color) {
         this.scene = scene;
@@ -8,6 +8,7 @@ export default class Player {
         this.depth = depth;
         this.color = color;
         this.cube = null;
+        this.canJump = true;
     }
     draw() {
         const playerBox = new THREE.BoxGeometry(
@@ -35,5 +36,7 @@ export default class Player {
     moveLeft() {
         this.cube.position.z -= this.width;
     }
-    jump() {}
+    jump() {
+        this.canJump = false;
+    }
 }
