@@ -18,7 +18,7 @@ export default class Cube {
             this.height,
             this.depth
         );
-        const cubeMaterial = new THREE.MeshLambertMaterial({
+        const cubeMaterial = new THREE.MeshPhongMaterial({
             color: this.color
         });
         this.cube = new THREE.Mesh(cubeGeometry, cubeMaterial);

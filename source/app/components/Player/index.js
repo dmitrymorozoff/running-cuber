@@ -15,7 +15,7 @@ export default class Player {
             this.height,
             this.depth
         );
-        const playerBoxMaterial = new THREE.MeshLambertMaterial({
+        const playerBoxMaterial = new THREE.MeshPhongMaterial({
             color: this.color
         });
 

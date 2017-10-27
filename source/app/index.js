@@ -27,8 +27,8 @@ export default class Game {
         const axisHelper = new THREE.AxisHelper(1000);
         scene.add(axisHelper);
         // Вершшхний свет
-        var shadowlight = new THREE.DirectionalLight(0xffffff, 1.8);
-        shadowlight.position.set(0, 50, 0);
+        var shadowlight = new THREE.DirectionalLight(0xffffff, 0.1);
+        shadowlight.position.set(-50, 50, 50);
         shadowlight.castShadow = true;
         shadowlight.shadowDarkness = 0.1;
         scene.add(shadowlight);
@@ -39,11 +39,11 @@ export default class Game {
         );
         scene.add(pointLightHelper);*/
         // Передний свет
-        var light = new THREE.DirectionalLight(0xffffff, 1.8);
+        var light = new THREE.DirectionalLight(0xffffff, 0.2);
         light.position.set(60, 100, 20);
         scene.add(light);
         //Задний свет
-        var backLight = new THREE.DirectionalLight(0xffffff, 1);
+        var backLight = new THREE.DirectionalLight(0xf2f2f2, 1);
         backLight.position.set(-40, 100, 20);
         scene.add(backLight);
         // Сетка
@@ -54,7 +54,7 @@ export default class Game {
 
         const renderer = new THREE.WebGLRenderer({ antialias: true });
         renderer.setSize(window.innerWidth, window.innerHeight);
-        renderer.setClearColor(0x000000, 1);
+        renderer.setClearColor(0x111111, 1);
         document.body.appendChild(renderer.domElement);
 
         const gameScene = new Scene(scene, shadowlight, camera, renderer);

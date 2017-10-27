@@ -13,6 +13,9 @@ export default class Map {
                 [1, 0, 0, 0, 0, 0, 0, 0],
                 [1, 0, 0, 0, 0, 0, 0, 0],
                 [1, 0, 0, 0, 0, 0, 0, 0],
+                [1, 0, 0, 0, 0, 0, 0, 0],
+                [1, 0, 0, 0, 0, 0, 0, 0],
+                [1, 0, 0, 0, 0, 0, 0, 0],
                 [1, 2, 0, 0, 0, 0, 0, 0],
                 [1, 2, 0, 0, 0, 0, 0, 0],
                 [1, 2, 2, 0, 0, 0, 0, 0],
@@ -21,23 +24,25 @@ export default class Map {
                 [1, 2, 2, 0, 0, 0, 0, 0],
                 [1, 2, 0, 0, 0, 0, 0, 0],
                 [1, 2, 0, 2, 0, 0, 0, 0],
+                [1, 2, 0, 2, 0, 0, 0, 0],
+                [1, 2, 0, 2, 0, 0, 0, 0],
                 [1, 2, 0, 2, 0, 0, 0, 0]
             ],
             [
-                [0, 0, 0, 3, 0, 0, 0],
-                [0, 0, 0, 3, 0, 0, 0],
-                [3, 3, 3, 3, 3, 3, 3],
-                [0, 0, 0, 3, 0, 0, 0],
-                [0, 0, 0, 3, 0, 0, 0],
-                [0, 0, 0, 3, 0, 0, 0]
+                [3, 0, 0, 0, 0, 0, 0],
+                [3, 0, 0, 0, 0, 0, 0],
+                [3, 3, 0, 0, 0, 0, 0],
+                [3, 3, 0, 0, 0, 0, 0],
+                [3, 3, 3, 0, 0, 0, 0],
+                [3, 3, 0, 0, 0, 0, 0]
             ],
             [
-                [3, 3, 3, 3, 3, 3, 3],
-                [3, 3, 3, 3, 3, 3, 3],
-                [3, 3, 3, 3, 3, 3, 3],
-                [3, 3, 3, 3, 3, 3, 3],
-                [3, 0, 3, 0, 3, 3, 3],
-                [3, 3, 3, 3, 3, 3, 3]
+                [4, 4, 4, 0, 0, 0, 0],
+                [4, 4, 4, 0, 0, 0, 0],
+                [4, 4, 4, 0, 0, 0, 0],
+                [4, 4, 4, 0, 0, 0, 0],
+                [4, 0, 4, 0, 0, 0, 0],
+                [4, 4, 4, 0, 0, 0, 0]
             ]
         ];
     }
@@ -64,13 +69,20 @@ export default class Map {
                                 this.size,
                                 this.size,
                                 y,
-                                z / 2,
-                                x
+                                z,
+                                x,
+                                false
                             );
-                            // this.drawBlock(y,z,x);
                             break;
                         case 3:
-                            // this.drawBlock(x + 2, y, z);
+                            this.drawBlock(
+                                this.size,
+                                this.size,
+                                this.size,
+                                y,
+                                z,
+                                x - 5
+                            );
                             break;
                         default:
                             break;
@@ -79,7 +91,7 @@ export default class Map {
             }
         }
     }
-    drawBlock(width, height, depth, x, y, z) {
+    drawBlock(width, height, depth, x, y, z, isFloor = true) {
         const geometry = new THREE.BoxGeometry(width, height, depth);
         const material = new THREE.MeshLambertMaterial({
             color: this.color,
@@ -88,7 +100,12 @@ export default class Map {
 
         this.block = new THREE.Mesh(geometry, material);
         this.block.position.x = this.x + x * this.size;
-        this.block.position.y = this.y + y * this.size;
+        if (isFloor) {
+            this.block.position.y = this.y + y * this.size;
+        } else {
+            this.block.position.y =
+                this.y + y * this.size - this.size / 2 + this.size / 4 / 2;
+        }
         this.block.position.z = this.z + z * this.size;
         this.block.castShadow = true;
         this.block.receiveShadow = false;

@@ -19,7 +19,7 @@ export default class Scene {
         window.addEventListener("keydown", function(event) {
             var keyCode = event.which;
             if (keyCode == 65) {
-                self.player.moveLeft();
+                self.player.moveLeft(); 
             }
             if (keyCode == 68) {
                 self.player.moveRight();
