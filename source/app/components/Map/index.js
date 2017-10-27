@@ -1,4 +1,7 @@
 import * as THREE from "three";
+import getRandomInt from "../../../utils/index.js";
+
+const blockColors = [0xb0b3b7, 0xebedf2, 0xb7babe];
 
 export default class Map {
     constructor(scene, x, y, z, color, size) {
@@ -9,6 +12,25 @@ export default class Map {
         this.color = color;
         this.size = size;
         this.map = this.map = [
+            [
+                [1, 0, 0, 0, 0, 0, 0, 0],
+                [1, 2, 0, 0, 0, 0, 0, 0],
+                [1, 0, 0, 0, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0, 0, 0, 0],
+                [1, 0, 0, 0, 0, 0, 0, 0],
+                [1, 0, 0, 0, 0, 0, 0, 0],
+                [1, 0, 0, 0, 0, 0, 0, 0],
+                [1, 2, 0, 0, 0, 0, 0, 0],
+                [1, 2, 0, 0, 0, 0, 0, 0],
+                [1, 0, 0, 0, 0, 0, 0, 0],
+                [1, 2, 0, 0, 0, 0, 0, 0],
+                [1, 2, 0, 0, 0, 0, 0, 0],
+                [1, 0, 0, 0, 0, 0, 0, 0],
+                [1, 0, 0, 2, 0, 0, 0, 0],
+                [1, 2, 0, 0, 0, 0, 0, 0],
+                [1, 0, 0, 0, 0, 0, 0, 0],
+                [1, 0, 0, 0, 0, 0, 0, 0]
+            ],
             [
                 [1, 0, 0, 0, 0, 0, 0, 0],
                 [1, 0, 0, 0, 0, 0, 0, 0],
@@ -29,20 +51,61 @@ export default class Map {
                 [1, 2, 0, 2, 0, 0, 0, 0]
             ],
             [
-                [3, 0, 0, 0, 0, 0, 0],
-                [3, 0, 0, 0, 0, 0, 0],
-                [3, 3, 0, 0, 0, 0, 0],
-                [3, 3, 0, 0, 0, 0, 0],
-                [3, 3, 3, 0, 0, 0, 0],
-                [3, 3, 0, 0, 0, 0, 0]
+                [1, 0, 0, 0, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0, 0, 0, 0],
+                [1, 0, 0, 0, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0, 0, 0, 0],
+                [1, 0, 0, 0, 0, 0, 0, 0],
+                [1, 0, 0, 0, 0, 0, 0, 0],
+                [1, 2, 0, 0, 0, 0, 0, 0],
+                [1, 0, 0, 0, 0, 0, 0, 0],
+                [1, 0, 0, 0, 0, 0, 0, 0],
+                [1, 0, 0, 0, 0, 0, 0, 0],
+                [1, 0, 0, 0, 0, 0, 0, 0],
+                [1, 2, 0, 0, 0, 0, 0, 0],
+                [1, 0, 0, 0, 0, 0, 0, 0],
+                [1, 2, 0, 0, 0, 0, 0, 0],
+                [1, 0, 0, 0, 0, 0, 0, 0],
+                [1, 0, 0, 0, 0, 0, 0, 0],
+                [1, 0, 0, 0, 0, 0, 0, 0]
             ],
             [
-                [4, 4, 4, 0, 0, 0, 0],
-                [4, 4, 4, 0, 0, 0, 0],
-                [4, 4, 4, 0, 0, 0, 0],
-                [4, 4, 4, 0, 0, 0, 0],
-                [4, 0, 4, 0, 0, 0, 0],
-                [4, 4, 4, 0, 0, 0, 0]
+                [1, 0, 0, 0, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0, 0, 0, 0],
+                [1, 0, 0, 0, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0, 0, 0, 0],
+                [1, 0, 0, 0, 0, 0, 0, 0],
+                [1, 0, 0, 0, 0, 0, 0, 0],
+                [1, 2, 0, 0, 0, 0, 0, 0],
+                [1, 0, 0, 0, 0, 0, 0, 0],
+                [1, 0, 0, 0, 0, 0, 0, 0],
+                [1, 0, 0, 0, 0, 0, 0, 0],
+                [1, 0, 0, 0, 0, 0, 0, 0],
+                [1, 2, 0, 0, 0, 0, 0, 0],
+                [1, 0, 0, 0, 0, 0, 0, 0],
+                [1, 2, 0, 0, 0, 0, 0, 0],
+                [1, 0, 0, 0, 0, 0, 0, 0],
+                [1, 0, 0, 0, 0, 0, 0, 0],
+                [1, 0, 0, 0, 0, 0, 0, 0]
+            ],
+            [
+                [1, 0, 0, 0, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0, 0, 0, 0],
+                [1, 0, 0, 0, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0, 0, 0, 0],
+                [1, 0, 0, 0, 0, 0, 0, 0],
+                [1, 0, 0, 0, 0, 0, 0, 0],
+                [1, 2, 0, 0, 0, 0, 0, 0],
+                [1, 0, 0, 0, 0, 0, 0, 0],
+                [1, 0, 0, 0, 0, 0, 0, 0],
+                [1, 0, 0, 0, 0, 0, 0, 0],
+                [1, 0, 0, 0, 0, 0, 0, 0],
+                [1, 2, 0, 0, 0, 0, 0, 0],
+                [1, 0, 0, 0, 0, 0, 0, 0],
+                [1, 2, 0, 0, 0, 0, 0, 0],
+                [1, 0, 0, 0, 0, 0, 0, 0],
+                [1, 0, 0, 0, 0, 0, 0, 0],
+                [1, 0, 0, 0, 0, 0, 0, 0]
             ]
         ];
     }
@@ -51,18 +114,16 @@ export default class Map {
             for (let y = 0; y < this.map[x].length; y++) {
                 for (let z = 0; z < this.map[x][y].length; z++) {
                     switch (this.map[x][y][z]) {
-                        // Пол
                         case 1:
                             this.drawBlock(
                                 this.size,
-                                this.size / 4,
+                                this.size / 2,
                                 this.size,
                                 y,
                                 z,
                                 x
                             );
                             break;
-                        // Барьеры
                         case 2:
                             this.drawBlock(
                                 this.size,
@@ -93,8 +154,8 @@ export default class Map {
     }
     drawBlock(width, height, depth, x, y, z, isFloor = true) {
         const geometry = new THREE.BoxGeometry(width, height, depth);
-        const material = new THREE.MeshLambertMaterial({
-            color: this.color,
+        const material = new THREE.MeshPhongMaterial({
+            color: blockColors[getRandomInt(0, 3)],
             shading: THREE.FlatShading
         });
 
@@ -104,7 +165,11 @@ export default class Map {
             this.block.position.y = this.y + y * this.size;
         } else {
             this.block.position.y =
-                this.y + y * this.size - this.size / 2 + this.size / 4 / 2;
+                this.y +
+                y * this.size -
+                this.size / 2 +
+                this.size / 2 -
+                this.size / 4;
         }
         this.block.position.z = this.z + z * this.size;
         this.block.castShadow = true;

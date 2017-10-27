@@ -14,15 +14,18 @@ export default class Scene {
     draw() {
         this.player = new Player(this.scene, 200, 200, 200, 0x6644ff);
         this.player.draw();
-        this.player.moveTo(0, 100 + 200 / 4, 0);
+        this.player.moveTo(0, 200 - 25, 0);
         const self = this;
         window.addEventListener("keydown", function(event) {
             var keyCode = event.which;
             if (keyCode == 65) {
-                self.player.moveLeft(); 
+                self.player.moveLeft();
             }
             if (keyCode == 68) {
                 self.player.moveRight();
+            }
+            if (keyCode == 32) {
+                self.player.jump();
             }
         });
     }

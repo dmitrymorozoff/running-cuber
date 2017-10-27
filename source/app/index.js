@@ -10,51 +10,64 @@ export default class Game {
     start() {
         let animationId;
         const scene = new THREE.Scene();
-        const camera = new THREE.PerspectiveCamera(
-            75,
-            window.innerWidth / window.innerHeight,
+        const aspect = window.innerWidth / window.innerHeight;
+        const frustumSize = 3200;
+        const camera = new THREE.OrthographicCamera(
+            frustumSize * aspect / -2,
+            frustumSize * aspect / 2,
+            frustumSize / 2,
+            frustumSize / -2,
             1,
             10000
         );
+        camera.position.y = 400;
         camera.position.x = this.settings.camera.x;
         camera.position.y = this.settings.camera.y;
         camera.position.z = this.settings.camera.z;
+        scene.add(new THREE.AmbientLight(0x111111));
+
         // Хуйня которая вертить камеру
         const controls = new OrbitControls(camera);
         controls.enableDamping = true;
         controls.dampingFactor = 0.25;
+
         // Вспомогательные оси
         const axisHelper = new THREE.AxisHelper(1000);
         scene.add(axisHelper);
+
         // Вершшхний свет
-        var shadowlight = new THREE.DirectionalLight(0xffffff, 0.1);
-        shadowlight.position.set(-50, 50, 50);
+        var shadowlight = new THREE.DirectionalLight(0xffffff, 0.3);
+        shadowlight.position.set(0, 100, 0);
         shadowlight.castShadow = true;
         shadowlight.shadowDarkness = 0.1;
         scene.add(shadowlight);
-        /*const sphereSize = 15;
-        const pointLightHelper = new THREE.PointLightHelper(
-            pointLight,
-            sphereSize
-        );
-        scene.add(pointLightHelper);*/
-        // Передний свет
-        var light = new THREE.DirectionalLight(0xffffff, 0.2);
-        light.position.set(60, 100, 20);
+
+        var light = new THREE.DirectionalLight(0xffffff, 0.6);
+        light.position.set(-60, 100, 20);
         scene.add(light);
-        //Задний свет
-        var backLight = new THREE.DirectionalLight(0xf2f2f2, 1);
-        backLight.position.set(-40, 100, 20);
+
+        var backLight = new THREE.DirectionalLight(0x777777, 0.45);
+        backLight.position.set(-10, 100, 60);
         scene.add(backLight);
-        // Сетка
-        /*var size = 800;
-        var divisions = 50;
-        var gridHelper = new THREE.GridHelper(size, divisions);
-        scene.add(gridHelper);*/
+
+        var geometry = new THREE.PlaneGeometry(10000, 10000, 1, 1);
+        var material = new THREE.MeshBasicMaterial({ color: 0x202020 });
+        const floor = new THREE.Mesh(geometry, material);
+        floor.material.side = THREE.DoubleSide;
+        floor.position.y = -550;
+        floor.position.x = -100;
+        floor.rotation.x = 90 * Math.PI / 180;
+        floor.rotation.y = 0;
+        floor.rotation.z = 0;
+        floor.doubleSided = true;
+        floor.receiveShadow = true;
+        scene.add(floor);
 
         const renderer = new THREE.WebGLRenderer({ antialias: true });
         renderer.setSize(window.innerWidth, window.innerHeight);
-        renderer.setClearColor(0x111111, 1);
+        renderer.setClearColor(0x202020, 1);
+        renderer.shadowMapEnabled = true;
+        renderer.shadowMapType = THREE.PCFSoftShadowMap;
         document.body.appendChild(renderer.domElement);
 
         const gameScene = new Scene(scene, shadowlight, camera, renderer);
@@ -62,7 +75,7 @@ export default class Game {
         gameScene.animate();
 
         const heightFloor = 200 / 4;
-        const map = new Map(scene, 0, heightFloor / 2, 0, 0xf9f8ed, 200);
+        const map = new Map(scene, 0, heightFloor / 2, -400, 0xbfc2c7, 200);
         map.draw();
 
         function resize() {

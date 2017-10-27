@@ -25,6 +25,8 @@ export default class Cube {
         this.cube.position.x = this.x;
         this.cube.position.y = this.y;
         this.cube.position.z = this.z;
+        this.cube.castShadow = true;
+        this.cube.receiveShadow = false;
         this.scene.add(this.cube);
     }
     move(x = 0, y = 0, z = 0) {

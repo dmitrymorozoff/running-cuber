@@ -18,8 +18,8 @@ import Game from "./app/index.js";
 const gameSettings = {
     camera: {
         x: -1000,
-        y: 1200,
-        z: 1000
+        y: 1300,
+        z: 1500
     }
 };
 
