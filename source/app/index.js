@@ -2,6 +2,7 @@ import * as THREE from "three";
 import OrbitControls from "orbit-controls-es6";
 import Scene from "./components/Scene/index.js";
 import Map from "./components/Map/index.js";
+import getRandomInt from "../utils/index.js";
 
 export default class Game {
     constructor(settings) {
@@ -50,7 +51,7 @@ export default class Game {
         backLight.position.set(-10, 100, 60);
         scene.add(backLight);
 
-        var geometry = new THREE.PlaneGeometry(10000, 10000, 1, 1);
+        /*var geometry = new THREE.PlaneGeometry(10000, 10000, 1, 1);
         var material = new THREE.MeshBasicMaterial({ color: 0x202020 });
         const floor = new THREE.Mesh(geometry, material);
         floor.material.side = THREE.DoubleSide;
@@ -61,11 +62,28 @@ export default class Game {
         floor.rotation.z = 0;
         floor.doubleSided = true;
         floor.receiveShadow = true;
-        scene.add(floor);
+        scene.add(floor);*/
+
+        const particleMaterial = new THREE.PointCloudMaterial({
+            color: 0xffffcc
+        });
+        const particleGeometry = new THREE.Geometry();
+        let x, y, z;
+        for (let i = 0; i < 500; i++) {
+            x = getRandomInt(-5000, 5000);
+            y = getRandomInt(-5000, 5000);
+            z = getRandomInt(-5000, 5000);
+            particleGeometry.vertices.push(new THREE.Vector3(x, y, z));
+        }
+        const pointCloud = new THREE.PointCloud(
+            particleGeometry,
+            particleMaterial
+        );
+        scene.add(pointCloud);
 
         const renderer = new THREE.WebGLRenderer({ antialias: true });
         renderer.setSize(window.innerWidth, window.innerHeight);
-        renderer.setClearColor(0x202020, 1);
+        renderer.setClearColor(0x101010, 1);
         renderer.shadowMapEnabled = true;
         renderer.shadowMapType = THREE.PCFSoftShadowMap;
         document.body.appendChild(renderer.domElement);
