@@ -14,6 +14,7 @@ export default class Scene {
     draw() {
         this.player = new Player(this.scene, 200, 200, 200, 0x6644ff);
         this.player.draw();
+        this.player.moveTo(0, 100 + 200 / 4, 0);
         const self = this;
         window.addEventListener("keydown", function(event) {
             var keyCode = event.which;

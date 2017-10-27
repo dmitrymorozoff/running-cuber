@@ -47,21 +47,22 @@ export default class Game {
         backLight.position.set(-40, 100, 20);
         scene.add(backLight);
         // Сетка
-        var size = 800;
+        /*var size = 800;
         var divisions = 50;
         var gridHelper = new THREE.GridHelper(size, divisions);
-        scene.add(gridHelper);
+        scene.add(gridHelper);*/
 
         const renderer = new THREE.WebGLRenderer({ antialias: true });
         renderer.setSize(window.innerWidth, window.innerHeight);
-        renderer.setClearColor(0x202020, 1);
+        renderer.setClearColor(0x000000, 1);
         document.body.appendChild(renderer.domElement);
 
         const gameScene = new Scene(scene, shadowlight, camera, renderer);
         gameScene.draw();
         gameScene.animate();
 
-        const map = new Map(scene, 400, 100, 0, 0xf9f8ed, 200);
+        const heightFloor = 200 / 4;
+        const map = new Map(scene, 0, heightFloor / 2, 0, 0xf9f8ed, 200);
         map.draw();
 
         function resize() {
