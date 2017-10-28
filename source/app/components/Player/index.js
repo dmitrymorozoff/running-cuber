@@ -6,8 +6,8 @@ export default class Player {
         this.scene = scene;
         this.map = map;
         this.color = color;
-        this.size = (this.map.getPlayerInfo()).size;
-        this.position = (this.map.getPlayerInfo()).position;
+        this.size = this.map.getPlayerInfo().size;
+        this.position = this.map.getPlayerInfo().position;
         this.bias = this.map.getBias();
         this.mapWidth = this.map.getMapWidth();
         this.cube = null;
@@ -25,9 +25,7 @@ export default class Player {
         });
 
         this.cube = new THREE.Mesh(playerBox, playerBoxMaterial);
-
         this.setPosition(this.position.x, this.position.y, this.position.z);
-
         this.scene.add(this.cube);
     }
     setPosition(x = 0, y = 0, z = 0) {
@@ -37,65 +35,56 @@ export default class Player {
         this.cube.position.z = cord.z;
     }
     moveLeft() {
-        if (this.map.isMove()) {
-            if (
-                    this.position.z - 1 >= 0 &&
-                    this.map.isFree(this.position.x, this.position.y, this.position.z - 1) &&
-                    this.map.isFree(this.position.x + 1, this.position.y, this.position.z - 1)
-                ) {
-                let coord = this.map.getCoordinate(this.position.x, this.position.y, --this.position.z);
-                TweenMax.to(this.cube.position, 0.5, {
-                    z: coord.z,
-                    ease: Power2.easeOut
-                });
-            }
-            this.map.updatePlayerPosition(this.position.x, this.position.y, this.position.z);
-        } else {
-            if (this.position.z - 1 >= 0 && this.map.isFree(this.position.x, this.position.y, this.position.z - 1)) {
-                let coord = this.map.getCoordinate(this.position.x, this.position.y, --this.position.z);
-                TweenMax.to(this.cube.position, 0.5, {
-                    z: coord.z,
-                    ease: Power2.easeOut
-                });
-            }
-            this.map.updatePlayerPosition(this.position.x, this.position.y, this.position.z);
+        let posX = this.position.x;
+        let posY = this.position.y;
+        let posZ = this.position.z;
+        if (
+            posZ - 1 >= 0 &&
+            this.map.isFree(posX, posY, posZ - 1) &&
+            this.map.isFree(posX + 1, posY, posZ - 1)
+        ) {
+            let coord = this.map.getCoordinate(posX, posY, --posZ);
+            TweenMax.to(this.cube.position, 0.5, {
+                z: coord.z,
+                ease: Power2.easeOut
+            });
         }
+        this.map.updatePlayerPosition(posX, posY, posZ);
     }
     moveRight() {
-        if (this.map.isMove()) {
-            if (
-                    this.position.z + 1 < this.mapWidth &&
-                    this.map.isFree(this.position.x, this.position.y, this.position.z + 1) &&
-                    this.map.isFree(this.position.x + 1, this.position.y, this.position.z + 1)
-                ) {
-                let coord = this.map.getCoordinate(this.position.x, this.position.y, ++this.position.z);
-                TweenMax.to(this.cube.position, 0.5, {
-                    z: coord.z,
-                    ease: Power2.easeOut
-                });
-            }
-            this.map.updatePlayerPosition(this.position.x, this.position.y, this.position.z);
-        } else {
-            if (this.position.z + 1 < this.mapWidth && this.map.isFree(this.position.x, this.position.y, this.position.z + 1)) {
-                let coord = this.map.getCoordinate(this.position.x, this.position.y, ++this.position.z);
-                TweenMax.to(this.cube.position, 0.5, {
-                    z: coord.z,
-                    ease: Power2.easeOut
-                });
-            }
-            this.map.updatePlayerPosition(this.position.x, this.position.y, this.position.z);
+        let posX = this.position.x;
+        let posY = this.position.y;
+        let posZ = this.position.z;
+        if (
+            posZ + 1 < this.mapWidth &&
+            this.map.isFree(posX, posY, posZ + 1) &&
+            this.map.isFree(posX + 1, posY, posZ + 1)
+        ) {
+            let coord = this.map.getCoordinate(posX, posY, ++posZ);
+            TweenMax.to(this.cube.position, 0.5, {
+                z: coord.z,
+                ease: Power2.easeOut
+            });
         }
+        this.map.updatePlayerPosition(posX, posY, posZ);
     }
     moveBottom() {
-        let coord = this.map.getCoordinate(this.position.x, --this.position.y, this.position.z);
+        let posX = this.position.x;
+        let posY = this.position.y;
+        let posZ = this.position.z;
+        let coord = this.map.getCoordinate(posX, --posY, posY);
         TweenMax.to(this.cube.position, 0.5, {
             y: coord.y,
             ease: Power2.easeOut
         });
-        this.map.updatePlayerPosition(this.position.x, this.position.y, this.position.z);
+        this.map.updatePlayerPosition(posX, posY, posZ);
     }
     jump() {
-        let coord = this.map.getCoordinate(this.position.x, this.position.y, this.position.z);
+        let coord = this.map.getCoordinate(
+            this.position.x,
+            this.position.y,
+            this.position.z
+        );
         TweenMax.to(this.cube.position, 1, {
             y: coord.y + this.size.height * 2,
             ease: Power2.easeOut
@@ -113,14 +102,18 @@ export default class Player {
                     if (self.cube.position.y == coord.y + self.size.height) {
                         clearInterval(id);
                         if (self.map.isJumpSuccess()) {
-                            self.map.updatePlayerPosition(self.position.x, ++self.position.y, self.position.z)
+                            self.map.updatePlayerPosition(
+                                self.position.x,
+                                ++self.position.y,
+                                self.position.z
+                            );
                         } else {
                             TweenMax.to(self.cube.position, 0.5, {
                                 y: coord.y,
                                 ease: Power2.easeOut
                             });
                         }
-                    } 
+                    }
                 });
             }
         });

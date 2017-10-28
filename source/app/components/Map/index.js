@@ -8,67 +8,67 @@ export default class Map {
         this.scene = scene;
         this.size = SIZE * scale;
         this.bias = {
-            'x': x,
-            'y': y + -(this.size / 2),
-            'z': z
+            x: x,
+            y: y + -(this.size / 2),
+            z: z
         };
-        this.mapArray = [],
-        this.map = [
-            [
-                [1, 1, 1, 1, 0],
-                [2, 0, 0, 0, 0],
-                [0, 0, 0, 0, 0],
-                [0, 0, 0, 0, 0]
-            ],
-            [
-                [1, 1, 1, 1, 0],
-                [0, 0, 0, 2, 0],
-                [0, 0, 0, 0, 0],
-                [0, 0, 0, 0, 0]
-            ],
-            [
-                [1, 1, 1, 1, 0],
-                [0, 0, 0, 0, 0],
-                [0, 0, 0, 0, 0],
-                [0, 0, 0, 0, 0]
-            ],
-            [
-                [1, 1, 1, 1, 0],
-                [0, 0, 0, 2, 0],
-                [0, 0, 0, 0, 0],
-                [0, 0, 0, 0, 0]
-            ],
-            [
-                [1, 1, 1, 1, 0],
-                [0, 2, 2, 2, 0],
-                [0, 0, 0, 0, 0],
-                [0, 0, 0, 0, 0]
-            ]
-        ];
+        (this.mapArray = []),
+            (this.map = [
+                [
+                    [1, 1, 1, 1, 0],
+                    [2, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0]
+                ],
+                [
+                    [1, 1, 1, 1, 0],
+                    [0, 0, 0, 2, 0],
+                    [0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0]
+                ],
+                [
+                    [1, 1, 1, 1, 0],
+                    [0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0]
+                ],
+                [
+                    [1, 1, 1, 1, 0],
+                    [0, 0, 0, 2, 0],
+                    [0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0]
+                ],
+                [
+                    [1, 1, 1, 1, 0],
+                    [0, 2, 2, 2, 0],
+                    [0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0]
+                ]
+            ]);
         this.playerInfo = {
-            'position': {
-                'x': 0,
-                'y': 1,
-                'z': 3
+            position: {
+                x: 0,
+                y: 1,
+                z: 3
             },
-            'size': {
-                'width': this.size,
-                'height': this.size,
-                'length': this.size,
+            size: {
+                width: this.size,
+                height: this.size,
+                length: this.size
             }
-        }
+        };
         this.style = {
-            '1': {
-                'width': this.size,
-                'height': this.size / 2,
-                'length': this.size,
-                'color': 0x3012050
+            "1": {
+                width: this.size,
+                height: this.size / 2,
+                length: this.size,
+                color: 0x3012050
             },
-            '2': {
-                'width': this.size,
-                'height': this.size ,
-                'length': this.size,
-                'color': 0xf0f0f0
+            "2": {
+                width: this.size,
+                height: this.size,
+                length: this.size,
+                color: 0xf0f0f0
             }
         };
         this.distancce = 0;
@@ -87,7 +87,11 @@ export default class Map {
         }
     }
     drawBlock(x, y, z, index) {
-        const geometry = new THREE.BoxGeometry(this.style[index].width, this.style[index].height, this.style[index].length);
+        const geometry = new THREE.BoxGeometry(
+            this.style[index].width,
+            this.style[index].height,
+            this.style[index].length
+        );
         const material = new THREE.MeshPhongMaterial({
             color: this.style[index].color,
             shading: THREE.FlatShading
@@ -108,10 +112,13 @@ export default class Map {
     }
     getCoordinate(x, y, z, index = null) {
         return {
-            'x': this.bias.x + x * this.size + this.size / 2,
-            'y': this.bias.y + y * this.size + (index == 1 ? (this.size - this.style[index].height) / 2 : 0),
-            'z': this.bias.z + z * this.size + this.size / 2
-        }
+            x: this.bias.x + x * this.size + this.size / 2,
+            y:
+                this.bias.y +
+                y * this.size +
+                (index == 1 ? (this.size - this.style[index].height) / 2 : 0),
+            z: this.bias.z + z * this.size + this.size / 2
+        };
     }
     getPlayerInfo() {
         return this.playerInfo;
@@ -139,23 +146,42 @@ export default class Map {
         return false;
     }
     isJumpSuccess() {
-        if (this.distancce <= 100 && this.playerInfo.position.x + 1 < this.map[this.playerInfo.position.z][this.playerInfo.position.y].length) return true;
+        if (
+            this.distancce <= 100 &&
+            this.playerInfo.position.x + 1 <
+                this.map[this.playerInfo.position.z][this.playerInfo.position.y]
+                    .length
+        )
+            return true;
         return false;
     }
     move() {
         if (
-                this.playerInfo.position.x + 1 < this.map[this.playerInfo.position.z][this.playerInfo.position.y].length &&
-                this.map[this.playerInfo.position.z][this.playerInfo.position.y][this.playerInfo.position.x + 1] > 0
-            ) {
-            console.log('лузыч');
+            this.playerInfo.position.x + 1 <
+                this.map[this.playerInfo.position.z][this.playerInfo.position.y]
+                    .length &&
+            this.map[this.playerInfo.position.z][this.playerInfo.position.y][
+                this.playerInfo.position.x + 1
+            ] > 0
+        ) {
+            console.log("лузыч");
         }
 
         if (this.distancce == this.size) {
             this.distancce -= 200;
-            this.updatePlayerPosition(++this.playerInfo.position.x, this.playerInfo.position.y, this.playerInfo.position.z);
+            this.updatePlayerPosition(
+                ++this.playerInfo.position.x,
+                this.playerInfo.position.y,
+                this.playerInfo.position.z
+            );
         }
 
-        while (this.playerInfo.position.y - 1 >= 0 && this.map[this.playerInfo.position.z][this.playerInfo.position.y - 1][this.playerInfo.position.x] === 0) {
+        while (
+            this.playerInfo.position.y - 1 >= 0 &&
+            this.map[this.playerInfo.position.z][
+                this.playerInfo.position.y - 1
+            ][this.playerInfo.position.x] === 0
+        ) {
             this.player.moveBottom();
         }
 
