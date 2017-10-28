@@ -1,5 +1,5 @@
 import Player from "../Player/index.js";
-import Cube from "../Cube/index.js";
+import Map from "../Map/index.js";
 import { TweenMax } from "gsap";
 
 export default class Scene {
@@ -10,11 +10,17 @@ export default class Scene {
         this.renderer = renderer;
         this.animationId = 0;
         this.player = null;
+        this.map = null;
     }
     draw() {
-        this.player = new Player(this.scene, 200, 200, 200, 0x6644ff);
-        this.player.draw();
-        this.player.moveTo(0, 200 - 25, 0);
+        this.map = new Map(this.scene);
+        this.map.draw();
+
+        this.player = new Player(this.scene, this.map, 0x2f94ff);
+    	this.player.draw();
+
+    	this.map.addPlayer(this.player);
+
         const self = this;
         window.addEventListener("keydown", function(event) {
             var keyCode = event.which;
@@ -32,5 +38,6 @@ export default class Scene {
     animate() {
         this.animationId = requestAnimationFrame(this.animate.bind(this));
         this.renderer.render(this.scene, this.camera);
+        this.map.move();
     }
 }

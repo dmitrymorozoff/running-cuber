@@ -1,7 +1,6 @@
 import * as THREE from "three";
 import OrbitControls from "orbit-controls-es6";
 import Scene from "./components/Scene/index.js";
-import Map from "./components/Map/index.js";
 import getRandomInt from "../utils/index.js";
 
 export default class Game {
@@ -92,10 +91,6 @@ export default class Game {
         const gameScene = new Scene(scene, shadowlight, camera, renderer);
         gameScene.draw();
         gameScene.animate();
-
-        const heightFloor = 200 / 4;
-        const map = new Map(scene, 0, heightFloor / 2, -400, 0xbfc2c7, 200);
-        map.draw();
 
         function resize() {
             camera.aspect = innerWidth / innerHeight;
