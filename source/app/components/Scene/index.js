@@ -14,12 +14,13 @@ export default class Scene {
     }
     draw() {
         this.map = new Map(this.scene);
-        this.map.draw();
+        this.map.generateMap();
+        //this.map.draw();
 
         this.player = new Player(this.scene, this.map, 0x2f94ff);
-    	this.player.draw();
+        this.player.draw();
 
-    	this.map.addPlayer(this.player);
+        this.map.addPlayer(this.player);
 
         const self = this;
         window.addEventListener("keydown", function(event) {

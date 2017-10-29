@@ -29,10 +29,10 @@ export default class Player {
         this.scene.add(this.cube);
     }
     setPosition(x = 0, y = 0, z = 0) {
-        let cord = this.map.getCoordinate(x, y, z);
-        this.cube.position.x = cord.x;
-        this.cube.position.y = cord.y;
-        this.cube.position.z = cord.z;
+        let coord = this.map.getCoordinate(x, y, z);
+        this.cube.position.x = coord.x;
+        this.cube.position.y = coord.y;
+        this.cube.position.z = coord.z;
     }
     moveLeft() {
         let posX = this.position.x;
