@@ -58,7 +58,7 @@ export default class Map {
                 width: this.size,
                 height: this.size / 2,
                 length: this.size,
-                color: 0x3012050
+                color: 0xf0f0f0
             },
             "2": {
                 width: this.size,
@@ -71,7 +71,7 @@ export default class Map {
         this.movePerTick = this.size / 100;
         this.player = null;
     }
-    /*draw() {
+    draw() {
         for (let z = 0; z < this.map.length; z++) {
             for (let y = 0; y < this.map[z].length; y++) {
                 for (let x = 0; x < this.map[z][y].length; x++) {
@@ -81,7 +81,7 @@ export default class Map {
                 }
             }
         }
-    }*/
+    }
     drawBlock(x, y, z, type) {
         if (type > 0) {
             const geometry = new THREE.BoxGeometry(
@@ -109,19 +109,34 @@ export default class Map {
         }
     }
     generateMap() {
-        for (let z = 0; z < 5; z++) {
-            for (let y = 0; y < 1; y++) {
-                for (let x = 0; x < 20; x++) {
-                    let rand = getRandomInt(2, 3);
+        const widthMap = 5;
+        const heightMap = 1;
+        const lengthMap = 5;
+        for (let z = 0; z < widthMap; z++) {
+            this.map[z] = [];
+            for (let y = 0; y < heightMap; y++) {
+                this.map[z][y] = [];
+                for (let x = 0; x < lengthMap; x++) {
+                    this.map[z][y][x] = 1;
+                    /*
+                    let typeFloor = getRandomInt(0, 100) > 10 ? 1 : 0;
                     this.drawBlock(
-                        getRandomInt(0, 20),
-                        getRandomInt(0, 2),
-                        getRandomInt(0, 6),
-                        rand
+                        getRandomInt(0, lengthMap),
+                        0,
+                        getRandomInt(0, widthMap + 1),
+                        typeFloor
                     );
+                    let typeBlock = getRandomInt(0, 50) > 40 ? 2 : 0;
+                    this.drawBlock(
+                        getRandomInt(0, lengthMap),
+                        getRandomInt(1, heightMap),
+                        getRandomInt(0, widthMap + 1),
+                        typeBlock
+                    );*/
                 }
             }
         }
+        console.log(this.map);
     }
     getCoordinate(x, y, z, type = null) {
         let size = this.size;
