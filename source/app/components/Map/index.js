@@ -110,14 +110,26 @@ export default class Map {
     }
     generateMap() {
         const widthMap = 5;
-        const heightMap = 1;
-        const lengthMap = 5;
+        const heightMap = 2;
+        const lengthMap = 20;
         for (let z = 0; z < widthMap; z++) {
             this.map[z] = [];
             for (let y = 0; y < heightMap; y++) {
                 this.map[z][y] = [];
                 for (let x = 0; x < lengthMap; x++) {
-                    this.map[z][y][x] = 1;
+                    switch (y) {
+                        case 0:
+                            this.map[z][y][x] =
+                                getRandomInt(0, 100) > 10 ? 1 : 0;
+                            break;
+                        case 1:
+                            this.map[z][y][x] =
+                                getRandomInt(0, 50) > 40 ? 2 : 0;
+                            break;
+                        default:
+                            break;
+                    }
+
                     /*
                     let typeFloor = getRandomInt(0, 100) > 10 ? 1 : 0;
                     this.drawBlock(
@@ -213,7 +225,7 @@ export default class Map {
             playerPosX + 1 < this.map[playerPosZ][playerPosY].length &&
             this.map[playerPosZ][playerPosY][playerPosX + 1] > 0
         ) {
-            this.restartMap();
+            // this.restartMap();
             console.log("лузыч");
         }
 
