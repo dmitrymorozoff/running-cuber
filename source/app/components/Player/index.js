@@ -24,6 +24,11 @@ export default class Player {
             color: this.color
         });
 
+        // const playerBoxMaterial = new THREE.MeshPhongMaterial({
+        //     color: this.color,
+        //     shading: THREE.FlatShading
+        // });
+
         this.cube = new THREE.Mesh(playerBox, playerBoxMaterial);
         this.setPosition(this.position.x, this.position.y, this.position.z);
         this.scene.add(this.cube);

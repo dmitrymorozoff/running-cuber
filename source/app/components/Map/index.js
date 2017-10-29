@@ -1,12 +1,12 @@
 import * as THREE from "three";
 import getRandomInt from "../../../utils/index.js";
 
-const SIZE = 200;
+const BLOCK_SIZE = 200;
 
 export default class Map {
     constructor(scene, x = 0, y = 0, z = 0, scale = 1) {
         this.scene = scene;
-        this.size = SIZE * scale;
+        this.size = BLOCK_SIZE * scale;
         this.bias = {
             x: x,
             y: y + -(this.size / 2),
@@ -14,33 +14,6 @@ export default class Map {
         };
         this.mapArray = [];
         this.map = [];
-        /*this.map = [
-            [
-                [1, 1, 1, 1, 0],
-                [2, 2, 0, 0, 0],
-                [0, 0, 0, 0, 0],
-                [0, 0, 0, 0, 0]
-            ],
-            [
-                [1, 1, 1, 1, 0],
-                [0, 0, 0, 2, 0],
-                [0, 0, 0, 0, 0],
-                [0, 0, 0, 0, 0]
-            ],
-            [
-                [1, 1, 1, 1, 0],
-                [0, 0, 0, 0, 0],
-                [0, 0, 0, 0, 0],
-                [0, 0, 0, 0, 0]
-            ],
-            [
-                [1, 1, 1, 1, 0],
-                [0, 0, 0, 2, 0],
-                [0, 0, 0, 0, 0],
-                [0, 0, 0, 0, 0]
-            ],
-            [[1, 1, 1, 1, 0], [0, 2, 2, 2, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]]
-        ];*/
         this.playerInfo = {
             position: {
                 x: 0,
@@ -58,13 +31,19 @@ export default class Map {
                 width: this.size,
                 height: this.size / 2,
                 length: this.size,
-                color: 0xf0f0f0
+                colors: [0xb0b3b7, 0xebedf2, 0xb7babe]
             },
             "2": {
                 width: this.size,
                 height: this.size,
                 length: this.size,
-                color: 0xf0f0f0
+                colors: [0xb0b3b7, 0xebedf2, 0xb7babe]
+            },
+            "3": {
+                width: this.size / 4,
+                height: this.size / 4,
+                length: this.size / 4,
+                colors: [0x76ff03, 0xff1744, 0x651fff]
             }
         };
         this.distancce = 0;
@@ -83,35 +62,48 @@ export default class Map {
         }
     }
     drawBlock(x, y, z, type) {
-        if (type > 0) {
-            const geometry = new THREE.BoxGeometry(
-                this.style[type].width,
-                this.style[type].height,
-                this.style[type].length
-            );
-            const material = new THREE.MeshPhongMaterial({
-                color: this.style[type].color,
+        console.log(type);
+        const geometry = new THREE.BoxGeometry(
+            this.style[type].width,
+            this.style[type].height,
+            this.style[type].length
+        );
+
+        let color = this.style[type].colors[
+            getRandomInt(0, this.style[type].colors.length)
+        ];
+
+        let material;
+        if (type === 3) {
+            material = new THREE.MeshBasicMaterial({
+                color
+            });
+        } else {
+            material = new THREE.MeshPhongMaterial({
+                color,
                 shading: THREE.FlatShading
             });
-
-            this.block = new THREE.Mesh(geometry, material);
-
-            let coord = this.getCoordinate(x, y, z, type);
-            this.block.position.x = coord.x;
-            this.block.position.y = coord.y;
-            this.block.position.z = coord.z;
-
-            this.block.castShadow = true;
-            this.block.receiveShadow = false;
-
-            this.mapArray.push(this.block);
-            this.scene.add(this.block);
         }
+
+        this.block = new THREE.Mesh(geometry, material);
+
+        let coord = this.getCoordinate(x, y, z, type);
+        this.block.position.x = coord.x;
+        this.block.position.y = coord.y;
+        this.block.position.z = coord.z;
+
+        this.block.castShadow = true;
+        this.block.receiveShadow = false;
+
+        this.mapArray.push(this.block);
+        this.scene.add(this.block);
     }
     generateMap() {
         const widthMap = 5;
-        const heightMap = 2;
+        const heightMap = 4;
         const lengthMap = 20;
+        const startBarrierFrom = 4;
+        const startHoleFrom = 3;
         for (let z = 0; z < widthMap; z++) {
             this.map[z] = [];
             for (let y = 0; y < heightMap; y++) {
@@ -119,36 +111,36 @@ export default class Map {
                 for (let x = 0; x < lengthMap; x++) {
                     switch (y) {
                         case 0:
-                            this.map[z][y][x] =
-                                getRandomInt(0, 100) > 10 ? 1 : 0;
+                            if (x >= startHoleFrom) {
+                                this.map[z][y][x] =
+                                    getRandomInt(0, 100) > 10 ? 1 : 0;
+                            } else {
+                                this.map[z][y][x] = 1;
+                            }
                             break;
                         case 1:
+                            if (x >= startBarrierFrom) {
+                                this.map[z][y][x] =
+                                    getRandomInt(0, 50) > 40
+                                        ? getRandomInt(2, 4)
+                                        : 0;
+                            } else {
+                                this.map[z][y][x] = 0;
+                            }
+                            break;
+                        case 2:
+                            this.map[z][y][x] = 0;
+                            break;
+                        case 3:
                             this.map[z][y][x] =
-                                getRandomInt(0, 50) > 40 ? 2 : 0;
+                                getRandomInt(0, 150) > 140 ? 2 : 0;
                             break;
                         default:
                             break;
                     }
-
-                    /*
-                    let typeFloor = getRandomInt(0, 100) > 10 ? 1 : 0;
-                    this.drawBlock(
-                        getRandomInt(0, lengthMap),
-                        0,
-                        getRandomInt(0, widthMap + 1),
-                        typeFloor
-                    );
-                    let typeBlock = getRandomInt(0, 50) > 40 ? 2 : 0;
-                    this.drawBlock(
-                        getRandomInt(0, lengthMap),
-                        getRandomInt(1, heightMap),
-                        getRandomInt(0, widthMap + 1),
-                        typeBlock
-                    );*/
                 }
             }
         }
-        console.log(this.map);
     }
     getCoordinate(x, y, z, type = null) {
         let size = this.size;

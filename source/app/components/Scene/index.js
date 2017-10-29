@@ -17,7 +17,7 @@ export default class Scene {
         this.map.generateMap();
         this.map.draw();
 
-        this.player = new Player(this.scene, this.map, 0x2f94ff);
+        this.player = new Player(this.scene, this.map, 0xf50057);
         this.player.draw();
 
         this.map.addPlayer(this.player);
@@ -39,6 +39,6 @@ export default class Scene {
     animate() {
         this.animationId = requestAnimationFrame(this.animate.bind(this));
         this.renderer.render(this.scene, this.camera);
-        this.map.move();
+        // this.map.move();
     }
 }
