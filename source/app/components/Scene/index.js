@@ -39,6 +39,6 @@ export default class Scene {
     animate() {
         this.animationId = requestAnimationFrame(this.animate.bind(this));
         this.renderer.render(this.scene, this.camera);
-        // this.map.move();
+        this.map.move();
     }
 }

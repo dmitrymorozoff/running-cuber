@@ -46,7 +46,7 @@ export default class Map {
                 colors: [0x76ff03, 0xff1744, 0x651fff]
             }
         };
-        this.distancce = 0;
+        this.distance = 0;
         this.movePerTick = this.size / 100;
         this.player = null;
     }
@@ -142,6 +142,16 @@ export default class Map {
             }
         }
     }
+    removeFirstLine() {
+        console.log(this.scene);
+        for (let i = 0; i < this.scene.children.length; i++) {
+            if (this.scene.children[i].type === "Mesh") {
+                if (this.scene.children[i].position.x <= 0) {
+                    this.scene.remove(this.scene.children[i]);
+                }
+            }
+        }
+    }
     getCoordinate(x, y, z, type = null) {
         let size = this.size;
         return {
@@ -176,18 +186,12 @@ export default class Map {
         }
         return false;
     }
-    isMove() {
-        if (this.distancce != 0) {
-            return true;
-        }
-        return false;
-    }
     isJumpSuccess() {
         let playerPosX = this.playerInfo.position.x;
         let playerPosY = this.playerInfo.position.y;
         let playerPosZ = this.playerInfo.position.z;
         if (
-            this.distancce <= 100 &&
+            this.distance <= 100 &&
             playerPosX + 1 < this.map[playerPosZ][playerPosY].length
         ) {
             return true;
@@ -221,9 +225,10 @@ export default class Map {
             console.log("лузыч");
         }
 
-        if (this.distancce == this.size) {
-            this.distancce -= 200;
+        if (this.distance == this.size) {
+            this.distance -= 200;
             this.updatePlayerPosition(++playerPosX, playerPosY, playerPosZ);
+            this.removeFirstLine();
         }
 
         while (
@@ -239,6 +244,6 @@ export default class Map {
             this.mapArray[i].position.x -= this.movePerTick;
         }
 
-        this.distancce += this.movePerTick;
+        this.distance += this.movePerTick;
     }
 }
