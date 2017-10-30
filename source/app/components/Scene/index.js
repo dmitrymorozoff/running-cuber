@@ -15,7 +15,8 @@ export default class Scene {
     draw() {
         this.map = new Map(this.scene);
         this.map.generateMap();
-        this.map.draw();
+        const lengthMap = 20;
+        this.map.draw(0, lengthMap);
 
         this.player = new Player(this.scene, this.map, 0xf50057);
         this.player.draw();

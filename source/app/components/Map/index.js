@@ -47,13 +47,18 @@ export default class Map {
             }
         };
         this.distance = 0;
-        this.movePerTick = this.size / 100;
+        this.speed = this.size / 25;
         this.player = null;
+        this.widthMap = 5;
+        this.heightMap = 4;
+        this.lengthMap = 20;
+        this.startBarrierFrom = 4;
+        this.startHoleFrom = 3;
     }
-    draw() {
+    draw(begin, end) {
         for (let z = 0; z < this.map.length; z++) {
             for (let y = 0; y < this.map[z].length; y++) {
-                for (let x = 0; x < this.map[z][y].length; x++) {
+                for (let x = begin; x < end; x++) {
                     if (this.map[z][y][x] > 0) {
                         this.drawBlock(x, y, z, this.map[z][y][x]);
                     }
@@ -62,7 +67,6 @@ export default class Map {
         }
     }
     drawBlock(x, y, z, type) {
-        console.log(type);
         const geometry = new THREE.BoxGeometry(
             this.style[type].width,
             this.style[type].height,
@@ -99,19 +103,14 @@ export default class Map {
         this.scene.add(this.block);
     }
     generateMap() {
-        const widthMap = 5;
-        const heightMap = 4;
-        const lengthMap = 20;
-        const startBarrierFrom = 4;
-        const startHoleFrom = 3;
-        for (let z = 0; z < widthMap; z++) {
+        for (let z = 0; z < this.widthMap; z++) {
             this.map[z] = [];
-            for (let y = 0; y < heightMap; y++) {
+            for (let y = 0; y < this.heightMap; y++) {
                 this.map[z][y] = [];
-                for (let x = 0; x < lengthMap; x++) {
+                for (let x = 0; x < this.lengthMap; x++) {
                     switch (y) {
                         case 0:
-                            if (x >= startHoleFrom) {
+                            if (x >= this.startHoleFrom) {
                                 this.map[z][y][x] =
                                     getRandomInt(0, 100) > 10 ? 1 : 0;
                             } else {
@@ -119,7 +118,7 @@ export default class Map {
                             }
                             break;
                         case 1:
-                            if (x >= startBarrierFrom) {
+                            if (x >= this.startBarrierFrom) {
                                 this.map[z][y][x] =
                                     getRandomInt(0, 50) > 40
                                         ? getRandomInt(2, 4)
@@ -143,14 +142,46 @@ export default class Map {
         }
     }
     removeFirstLine() {
-        console.log(this.scene);
-        for (let i = 0; i < this.scene.children.length; i++) {
-            if (this.scene.children[i].type === "Mesh") {
-                if (this.scene.children[i].position.x <= 0) {
-                    this.scene.remove(this.scene.children[i]);
+        for (let i = 0; i < this.mapArray.length; i++) {
+            if (this.mapArray[i].position.x < 0) {
+                this.scene.remove(this.mapArray[i]);
+            }
+        }
+    }
+    addNewLine() {
+        const widthMap = 5;
+        const heightMap = 4;
+        const lengthMap = 20;
+        for (let z = 0; z < widthMap; z++) {
+            this.map[z] = [];
+            for (let y = 0; y < heightMap; y++) {
+                this.map[z][y] = [];
+                for (let x = lengthMap - 1; x < lengthMap; x++) {
+                    switch (y) {
+                        case 0:
+                            this.map[z][y][x] =
+                                getRandomInt(0, 100) > 10 ? 1 : 0;
+                            break;
+                        case 1:
+                            this.map[z][y][x] =
+                                getRandomInt(0, 50) > 40
+                                    ? getRandomInt(2, 4)
+                                    : 0;
+                            break;
+                        case 2:
+                            this.map[z][y][x] = 0;
+                            break;
+                        case 3:
+                            this.map[z][y][x] =
+                                getRandomInt(0, 150) > 140 ? 2 : 0;
+                            break;
+                        default:
+                            break;
+                    }
                 }
             }
         }
+        this.draw(this.lengthMap - 1, this.lengthMap);
     }
     getCoordinate(x, y, z, type = null) {
         let size = this.size;
@@ -202,14 +233,11 @@ export default class Map {
         this.player = player;
     }
     restartMap() {
-        for (let i = 0; i < this.scene.children.length; i++) {
-            if (this.scene.children[i].type === "Mesh") {
-                this.scene.remove(this.scene.children[i]);
-            }
+        for (let i = 0; i < this.mapArray.length; i++) {
+            this.scene.remove(this.mapArray[i]);
         }
-        console.log(this.scene);
         this.mapArray.length = 0;
-        this.draw();
+        this.draw(0, this.lengthMap);
         this.updatePlayerPosition(0, 1, 3);
         this.player.draw();
     }
@@ -221,14 +249,14 @@ export default class Map {
             playerPosX + 1 < this.map[playerPosZ][playerPosY].length &&
             this.map[playerPosZ][playerPosY][playerPosX + 1] > 0
         ) {
-            // this.restartMap();
-            console.log("лузыч");
+            console.log("gameover");
         }
 
         if (this.distance == this.size) {
             this.distance -= 200;
             this.updatePlayerPosition(++playerPosX, playerPosY, playerPosZ);
             this.removeFirstLine();
+            this.addNewLine();
         }
 
         while (
@@ -241,9 +269,9 @@ export default class Map {
         }
 
         for (let i = 0; i < this.mapArray.length; i++) {
-            this.mapArray[i].position.x -= this.movePerTick;
+            this.mapArray[i].position.x -= this.speed;
         }
 
-        this.distance += this.movePerTick;
+        this.distance += this.speed;
     }
 }
