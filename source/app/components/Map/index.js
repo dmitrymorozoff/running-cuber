@@ -1,5 +1,6 @@
 import * as THREE from "three";
 import getRandomInt from "../../../utils/index.js";
+import Cube from "../Cube/index.js";
 
 const BLOCK_SIZE = 200;
 
@@ -60,47 +61,30 @@ export default class Map {
             for (let y = 0; y < this.map[z].length; y++) {
                 for (let x = begin; x < end; x++) {
                     if (this.map[z][y][x] > 0) {
-                        this.drawBlock(x, y, z, this.map[z][y][x]);
+                        /*this.drawBlock(x, y, z, this.map[z][y][x]);*/
+                        let type = this.map[z][y][x];
+                        let coord = this.getCoordinate(x, y, z, type);
+
+                        let color = this.style[type].colors[
+                            getRandomInt(0, this.style[type].colors.length)
+                        ];
+                        let cube = new Cube(
+                            this.scene,
+                            this.style[type].width,
+                            this.style[type].height,
+                            this.style[type].length,
+                            coord.x,
+                            coord.y,
+                            coord.z,
+                            color,
+                            type
+                        );
+                        this.mapArray.push(cube);
+                        cube.draw();
                     }
                 }
             }
         }
-    }
-    drawBlock(x, y, z, type) {
-        const geometry = new THREE.BoxGeometry(
-            this.style[type].width,
-            this.style[type].height,
-            this.style[type].length
-        );
-
-        let color = this.style[type].colors[
-            getRandomInt(0, this.style[type].colors.length)
-        ];
-
-        let material;
-        if (type === 3) {
-            material = new THREE.MeshBasicMaterial({
-                color
-            });
-        } else {
-            material = new THREE.MeshPhongMaterial({
-                color,
-                shading: THREE.FlatShading
-            });
-        }
-
-        this.block = new THREE.Mesh(geometry, material);
-
-        let coord = this.getCoordinate(x, y, z, type);
-        this.block.position.x = coord.x;
-        this.block.position.y = coord.y;
-        this.block.position.z = coord.z;
-
-        this.block.castShadow = true;
-        this.block.receiveShadow = false;
-
-        this.mapArray.push(this.block);
-        this.scene.add(this.block);
     }
     generateMap() {
         for (let z = 0; z < this.widthMap; z++) {
@@ -143,8 +127,8 @@ export default class Map {
     }
     removeFirstLine() {
         for (let i = 0; i < this.mapArray.length; i++) {
-            if (this.mapArray[i].position.x < 0) {
-                this.scene.remove(this.mapArray[i]);
+            if (this.mapArray[i].cube.position.x < 0) {
+                this.scene.remove(this.mapArray[i].cube);
             }
         }
     }
@@ -269,7 +253,7 @@ export default class Map {
         }
 
         for (let i = 0; i < this.mapArray.length; i++) {
-            this.mapArray[i].position.x -= this.speed;
+            this.mapArray[i].cube.position.x -= this.speed;
         }
 
         this.distance += this.speed;

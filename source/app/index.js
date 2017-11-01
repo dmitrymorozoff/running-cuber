@@ -1,6 +1,7 @@
 import * as THREE from "three";
 import OrbitControls from "orbit-controls-es6";
 import Scene from "./components/Scene/index.js";
+import Particles from "./components/Particles/index.js";
 import getRandomInt from "../utils/index.js";
 
 export default class Game {
@@ -26,16 +27,13 @@ export default class Game {
         camera.position.z = this.settings.camera.z;
         scene.add(new THREE.AmbientLight(0x111111));
 
-        // Хуйня которая вертить камеру
         const controls = new OrbitControls(camera);
         controls.enableDamping = true;
         controls.dampingFactor = 0.25;
 
-        // Вспомогательные оси
         const axisHelper = new THREE.AxisHelper(1000);
         scene.add(axisHelper);
 
-        // Вершшхний свет
         var shadowlight = new THREE.DirectionalLight(0xffffff, 0.3);
         shadowlight.position.set(0, 100, 0);
         shadowlight.castShadow = true;
@@ -50,35 +48,8 @@ export default class Game {
         backLight.position.set(-10, 100, 60);
         scene.add(backLight);
 
-        /*var geometry = new THREE.PlaneGeometry(10000, 10000, 1, 1);
-        var material = new THREE.MeshBasicMaterial({ color: 0x202020 });
-        const floor = new THREE.Mesh(geometry, material);
-        floor.material.side = THREE.DoubleSide;
-        floor.position.y = -550;
-        floor.position.x = -100;
-        floor.rotation.x = 90 * Math.PI / 180;
-        floor.rotation.y = 0;
-        floor.rotation.z = 0;
-        floor.doubleSided = true;
-        floor.receiveShadow = true;
-        scene.add(floor);*/
-
-        const particleMaterial = new THREE.PointCloudMaterial({
-            color: 0xffffcc
-        });
-        const particleGeometry = new THREE.Geometry();
-        let x, y, z;
-        for (let i = 0; i < 500; i++) {
-            x = getRandomInt(-5000, 5000);
-            y = getRandomInt(-5000, 5000);
-            z = getRandomInt(-5000, 5000);
-            particleGeometry.vertices.push(new THREE.Vector3(x, y, z));
-        }
-        const pointCloud = new THREE.PointCloud(
-            particleGeometry,
-            particleMaterial
-        );
-        scene.add(pointCloud);
+        const particles = new Particles(scene, 5000, 5000, 5000, 0xffffff, 500);
+        particles.draw();
 
         const renderer = new THREE.WebGLRenderer({ antialias: true });
         renderer.setPixelRatio(window.devicePixelRatio);
@@ -93,9 +64,13 @@ export default class Game {
         gameScene.animate();
 
         function resize() {
-            camera.aspect = innerWidth / innerHeight;
+            const aspect = window.innerWidth / window.innerHeight;
+            camera.left = -frustumSize * aspect / 2;
+            camera.right = frustumSize * aspect / 2;
+            camera.top = frustumSize / 2;
+            camera.bottom = -frustumSize / 2;
             camera.updateProjectionMatrix();
-            renderer.setSize(innerWidth, innerHeight);
+            renderer.setSize(window.innerWidth, window.innerHeight);
         }
         renderer.render(scene, camera);
         addEventListener("resize", resize);
