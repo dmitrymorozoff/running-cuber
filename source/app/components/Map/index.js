@@ -19,7 +19,7 @@ export default class Map {
             position: {
                 x: 0,
                 y: 1,
-                z: 3
+                z: 2
             },
             size: {
                 width: this.size,

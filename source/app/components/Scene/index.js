@@ -1,3 +1,4 @@
+import * as THREE from "three";
 import Player from "../Player/index.js";
 import Map from "../Map/index.js";
 import { TweenMax } from "gsap";
@@ -22,6 +23,22 @@ export default class Scene {
         this.player.draw();
 
         this.map.addPlayer(this.player);
+        const playerPosition = this.map.playerInfo.position;
+        const playerCoordinate = this.map.getCoordinate(
+            playerPosition.x,
+            playerPosition.y,
+            playerPosition.z
+        );
+
+        console.log(playerCoordinate);
+
+        var light = new THREE.PointLight(0xffffff, 1.5, 1600);
+        light.position.set(
+            playerCoordinate.x,
+            playerCoordinate.y + 400,
+            playerCoordinate.z
+        );
+        this.scene.add(light);
 
         const self = this;
         window.addEventListener("keydown", function(event) {
